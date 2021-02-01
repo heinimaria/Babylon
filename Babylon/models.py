@@ -14,10 +14,10 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default_user.jpg')
+    image_file = db.Column(db.String(20), nullable=False, default='default_user.png')
     password = db.Column(db.String(60), nullable=False)
 
-    houses = db.relationship('House', backref='user', lazy=True)
+    houses = db.relationship('House', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return f"User('{self.name}', '{self.email}')"
@@ -27,8 +27,11 @@ class Plant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(35), nullable=False)
     location = db.Column(db.String(35), nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default_plant.jpg')
-    date_watered = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    image_file = db.Column(db.String(20), nullable=False, default='default_plant.png')
+    date_watered = db.Column(db.DateTime)
+    watering_frequency = db.Column(db.Integer, nullable=False)
+    watering_history = db.Column(db.DateTime)
+    next_watering = db.Column(db.DateTime)
 
     house_id = db.Column(db.Integer, db.ForeignKey('house.id'), nullable=False)
 
@@ -46,7 +49,7 @@ class House(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    plants = db.relationship('Plant', backref='house', lazy=True)
+    plants = db.relationship('Plant', backref='house', lazy='dynamic')
 
     def __repr__(self):
         return f"House('{self.name}')"

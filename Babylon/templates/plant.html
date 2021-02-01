@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="col-sm-2">
+        <a  href="{{ url_for('house_view', house_id=plant.house.id) }}" style="padding-left:10px;">
+            <span class="fas fa-chevron-left"></span>
+            Back
+        </a>
+    </div>
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center container">
+        <div class="card" style="width: 25rem;">
+          <img class="card-img-top" src="{{ image_file }}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title">{{ plant.name }}</h5>
+                <p>
+                  <p> {{ plant.location }}, {{ plant.house.name }}</p>
+                  <p>Water every {{ plant.watering_frequency }} days</p>
+                  {% if plant.date_watered is not none %}
+                    <li class="card-text"> Last watered: {{ plant.date_watered.strftime('%d-%m-%Y') }}</li>
+                    <li>Next watering: {{ plant.next_watering.strftime('%d-%m-%Y') }} </li>
+
+                    {% if days_til_watering <= 0 %}
+                        <div>Water now!</div>
+                    {% elif days_til_watering == 1 %}
+                        <small>{{ days_til_watering }} day until next watering</small>
+                    {% else %}
+                        <small>{{ days_til_watering }} days until next watering</small>
+                    {% endif %}
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" style="width: {{ watering_progress }}%" aria-valuenow="{{ watering_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                  {% else %}
+                    <p class="card-text">You haven't watered this plant yet!</p>
+                  {% endif %}
+                    <a class="btn btn-info btn-sm" type="button" data-toggle="modal" data-target="#DateWatered{{ plant.id }}" style="margin-top: 5px;">Watered?</a>
+                        <div class="modal fade" id="DateWatered{{ plant.id }}" tabindex="-1" role="dialog" aria-labelledby="DateWateredTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ url_for('date_watered', plant_id=plant.id) }}" method=post>
+                                            {{ water_form.hidden_tag() }}
+                                            <div class="form-group">
+                                                {{ water_form.date_watered.label(class="form-control-label") }}
+                                                {% if water_form.date_watered.errors %}
+                                                    {{ water_form.date_watered(class="form-control form-control-lg is-invalid") }}
+                                                    <div class="invalid-feedback">
+                                                        {% for error in water_form.date_watered.errors %}
+                                                            <span>{{ error }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% else %}
+                                                    {{ water_form.date_watered(class="form-control form-control") }}
+                                                {% endif %}
+                                            </div>
+                                            <div class="form-group">
+                                                {{ water_form.submit(class="btn btn-dark btn-sm") }}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <p>
+                        <a href="#" class="btn btn-light btn-sm" style="margin-top: 15px;">View watering history</a>
+                    </p>
+                        <a href="{{ url_for('edit_plant', plant_id=plant.id) }}" class="card-link" type="button">
+                            <span class="far fa-edit"></span>
+                        </a>
+                        <a type="button" class="text-danger" data-toggle="modal" data-target="#DeletePlant{{ plant.id }}">
+                            <span class="far fa-trash-alt"></span>
+                        </a>
+                        <div class="modal fade" id="DeletePlant{{ plant.id }}" tabindex="-1" role="dialog" aria-labelledby="DeletePlantTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ url_for('delete_plant', plant_id=plant.id) }}" method=post name="delete">
+                                            <div class="form-group">
+                                                <p>Are you sure you want to remove this plant?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                                <input type="hidden" name="DELETE">
+                                                <input class="btn btn-danger btn-sm" name="delete-item" type="submit" value="Delete"/>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

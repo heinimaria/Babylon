@@ -1,8 +1,8 @@
-{% extends "layout.html" %}
+{% extends "index.html" %}
 {% block content %}
     <h1 style="padding: 30px;" class="display-3">Welcome!</h1>
         <div class="d-flex justify-content-center align-items-center container ">
-            <form method="POST" action="" style="padding: 20px;>
+            <form method="POST" action="" style="padding: 20px;">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
@@ -35,7 +35,7 @@
                     {{ form.remember.label(class="form-check-label") }}
                 </div>
                 <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-light") }}
+                    {{ form.submit(class="btn btn-outline-primary") }}
                 </div>
                 <small class="text-dark ml-2">
                     <a href="#">Forgot Password?</a>

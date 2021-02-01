@@ -5,48 +5,33 @@
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <style>
-        html, body {
-            font-family: monaco, Consolas, "Lucida Console", monospace;
-            height: 100%;
-            background-image: url('../static/bg-plant.jpg');
-            color: #fff;
-        }
-        form label{
-          color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top">
-            <div class="container">
-                <a class="navbar-brand mr-4" href="/">Home</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                <div class="collapse navbar-collapse" id="navbarToggle">
-                    <div class="navbar-nav mr-auto"></div>
-                </div>
-        <!-- Navbar Right Side -->
-                <div class="navbar-nav">
-                    {% if request.path == '/' %}
-                        <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
-                    {% endif %}
-                </div>
-            </div>
-    </nav>
-     <div class="col-md-12 text-center" style="padding-top: 55px;">
-        {% block content %} {% endblock %}
-         {% with messages = get_flashed_messages(with_categories=true) %}
+    <div class="sidenav">
+        <a href="{{ url_for('dashboard') }}">Home</a>
+        <a href="#search">Search</a>
+        <a href="#FAQs">FAQs</a>
+        <a href="#info"></a>
+        <li>
+            <a href="{{ url_for('user_account') }}">Account</a>
+            <a href="#contact">Contact</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </li>
+    </div>
+    <div class="col-md-12 text-center" style="padding-top: 30px; padding-left: 200px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                         <div class="alert alert-{{ category }}">
+                         <div class="alert alert-{{ category }}" style="text-align: center;">
                             {{ message }}
                         </div>
                     {% endfor %}
                 {% endif %}
          {% endwith %}
+        {% block content %}
+        {% endblock %}
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

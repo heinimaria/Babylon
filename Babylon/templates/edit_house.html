@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="col-sm-2">
+        <a href="{{ url_for('house_view', house_id=house.id) }}">
+            <span class="fas fa-chevron-left"></span>
+            Back
+        </a>
+    </div>
+    <h3 style="padding: 10px;">Edit</h3>
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center container">
+                <form method="POST" action="{{ url_for('edit_house', house_id=house.id) }}" style="padding: 5px; margin-bottom: 30px;">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.name.label(class="form-control-label") }}
+                        {% if form.name.errors %}
+                            {{ form.name(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.name(class="form-control form-control text-center") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.address_first_line.label(class="form-control-label") }}
+                        {% if form.address_first_line.errors %}
+                            {{ form.address_first_line(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.address_first_line.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.address_first_line(class="form-control form-control text-center") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.address_second_line.label(class="form-control-label") }}
+                        {% if form.address_second_line.errors %}
+                            {{ form.address_second_line(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.address_second_line.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.address_second_line(class="form-control form-control text-center") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.postcode.label(class="form-control-label") }}
+                        {% if form.postcode.errors %}
+                            {{ form.postcode(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.postcode.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.postcode(class="form-control form-control text-center") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.town.label(class="form-control-label") }}
+                        {% if form.town.errors %}
+                            {{ form.town(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.town.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.town(class="form-control form-control text-center") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-primary btn-sm", value="Update") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+{% endblock %}

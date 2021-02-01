@@ -1,0 +1,226 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container" id="first">
+            <div class="col-2">
+                <a href="{{ url_for('dashboard') }}">
+                    <span class="fas fa-chevron-left"></span>
+                    Back
+                </a>
+            </div>
+    </div>
+    <h2 style="padding-top:15px;">{{ house.name }}</h2>
+    {% for i in address %}
+            <small>{{ i }}</small>
+    {% endfor %}
+    <div class="container">
+        <a type="button" class="text-primary" href="{{ url_for('edit_house', house_id=house.id) }}">
+            <span class="far fa-edit"></span>
+        </a>
+        <a class="text-danger" data-toggle="modal" data-target="#DeleteHouse{{ house.id }}">
+            <span class="far fa-trash-alt"></span>
+        </a>
+        <div class="modal fade" id="DeleteHouse{{ house.id }}" tabindex="-1" role="dialog" aria-labelledby="DeleteHouseTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('delete_house', house_id=house.id) }}" method=post name="delete">
+                            <div class="form-group">
+                                <p>Are you sure you want to remove this location?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                <input type="hidden" name="DELETE">
+                                <input class="btn btn-danger btn-sm" name="delete-item" type="submit" value="Delete"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown" style="margin-top:10px;">
+      <button class="btn btn-success btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Add Plant
+        <span class="fas fa-plus"></span>
+      </button>
+      <div class="dropdown-menu">
+          <form class="px-4 py-3" method="POST" action="{{ url_for('add_plant', house_id=house.id) }}" enctype="multipart/form-data" style="padding: 5px; margin-bottom: 30px;">
+           {{ form.hidden_tag() }}
+            <div class="form-group">
+              {{ form.name.label(class="form-control-label") }}
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control", placeholder="Name") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+              {{ form.location.label(class="form-control-label") }}
+                {% if form.location.errors %}
+                    {{ form.location(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.location.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.location(class="form-control form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+            {{ form.watering_frequency.label(class="form-control-label") }}
+                {% if form.watering_frequency.errors %}
+                    {{ form.watering_frequency(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.watering_frequency.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.watering_frequency(class="form-control form-control") }}
+                {% endif %}
+            </div>
+             <div class="form-group">
+                {{ form.image.label(class="form-control-label") }}
+                {% if form.image.errors %}
+                    {{ form.image(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.image.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.image(class="form-control form-control") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-success btn-sm") }}
+            </div>
+            </form>
+        </div>
+    </div>
+    <legend class="border-bottom mb-4" style="margin-top: 30px;"></legend>
+    {% if watering_needed|length != 0 %}
+    <div class="container"  style="padding:30px; background-color: #b5b3b3;">
+        <a onclick="scrollToSecondFunction()" style="margin-top: 50px;">
+            <span class="fas fa-chevron-down"></span>
+        </a>
+        <div id="cardrow" class="row">
+            {% for plant in watering_needed %}
+                <div class="d-flex justify-content-center col-sm-3">
+                    <div class="card" style="width: 18rem; margin-left:20px; margin-bottom:30px; background-color: rgba(245, 245, 245, 0.5);">
+                      <img class="card-img-top" src="{{ url_for('static', filename='plant_pics/' + plant.image_file) }}" alt="Card image cap" style="height: 10vw; object-fit: cover;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ plant.name }}</h5>
+                          <p> {{ plant.location }}, {{ plant.house.name }}</p>
+                            {% for list in progress_ids %}
+                                {% if list[0] == plant.id %}
+                                    <p>Water me now!
+                                        <span class="fas fa-tint text-primary"></span>
+                                    </p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ list[1] }}%" aria-valuenow="{{ list[1] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <a href="{{ url_for('plant_view', plant_id=plant.id) }}" class="btn btn-dark btn-sm" type="button" style="margin-top: 15px;">
+                            View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% if unknown_plants|length != 0 %}
+    <div class="container" id="second" style="padding:30px;">
+        <a onclick="scrollToThirdFunction()" style="margin-top: 50px;">
+            <span class="fas fa-chevron-down"></span>
+        </a>
+        <div id="cardrow2" class="row">
+            {% for plant in unknown_plants %}
+            <div class="d-flex justify-content-center col-sm-3">
+                <div class="card" style="width: 18rem; margin-left:20px; margin-bottom:30px;">
+                  <img class="card-img-top" src="{{ url_for('static', filename='plant_pics/' + plant.image_file) }}" alt="Card image cap" style="height: 10vw; object-fit: cover;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ plant.name }}</h5>
+                      <p> {{ plant.location }}, {{ plant.house.name }}</p>
+                        <p class="card-text">You haven't watered this plant yet</p>
+                        <a href="{{ url_for('plant_view', plant_id=plant.id) }}" class="btn btn-dark btn-sm" type="button" style="margin-top: 15px;">
+                        View
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% if ok_plants|length != 0 %}
+    <div class="container" id="third" style="padding:30px; background-color: #b5b3b3;">
+        <div  id="cardrow3" class="row">
+            {% for plant in ok_plants %}
+                <div class="d-flex justify-content-center col-sm-3">
+                    <div class="card" style="width: 18rem; margin-left:20px; margin-bottom:30px;">
+                      <img class="card-img-top" src="{{ url_for('static', filename='plant_pics/' + plant.image_file) }}" alt="Card image cap" style="height: 10vw; object-fit: cover;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ plant.name }}</h5>
+                          <p> {{ plant.location }}, {{ plant.house.name }}</p>
+                          {% if plant.date_watered is not none %}
+                            {% for list in progress_ids %}
+                                {% if list[0] == plant.id %}
+                                    {% if list[1] >= 100 %}
+                                        <p>Water now!
+                                            <span class="fas fa-tint text-primary"></span>
+                                        </p>
+                                    {% endif %}
+                                    <small>Water in {{ (plant.next_watering - date_now).days }} days</small>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ list[1] }}%" aria-valuenow="{{ list[1] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                          {% endif %}
+                            <a href="{{ url_for('plant_view', plant_id=plant.id) }}" class="btn btn-dark btn-sm" type="button" style="margin-top: 15px;">
+                            View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <a onclick="scrollToFirstFunction()" style="margin-top: 50px;">
+            <span class="fas fa-chevron-up"></span>
+        </a>
+    </div>
+    {% endif %}
+    <script>
+        function scrollToSecondFunction() {
+            var element = document.getElementById("second");
+            element.scrollIntoView();
+        }
+    </script>
+    <script>
+        function scrollToThirdFunction() {
+         var element = document.getElementById("third");
+         element.scrollIntoView();
+        }
+    </script>
+    <script>
+        function scrollToFirstFunction() {
+         var element = document.getElementById("first");
+         element.scrollIntoView();
+        }
+    </script>
+{% endblock %}

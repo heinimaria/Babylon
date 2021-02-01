@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        html, body {
+            font-family: monaco, Consolas, "Lucida Console", monospace;
+            height: 100%;
+            background: #000000
+            color: #fff;
+        }
+        .card-body {
+            color: black;
+        }
+        .modal-header {
+            text-align:center;
+        }
+        .modal-content {
+            text-align:center;
+        }
+        .sidenav {
+          height: 100%;
+          width: 200px;
+          position: fixed;
+          z-index: 1;
+          top: 0;
+          left: 0;
+          background-color: #111;
+          overflow-x: hidden;
+          padding-top: 20px;
+          font-size: 18px;
+        }
+
+        .sidenav a {
+          padding: 6px 8px 6px 20px;
+          text-decoration: none;
+          color: #818181;
+          display: block;
+        }
+
+        .sidenav a:hover {
+          color: #f1f1f1;
+        }
+
+        .main {
+          margin-left: 300px; /* Same as the width of the sidenav */
+          padding: 0px 10px;
+          text-align:center;
+        }
+
+        @media screen and (max-height: 450px) {
+          .sidenav {padding-top: 15px;}
+          .sidenav a {font-size: 18px;}
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand mr-4" href="/">Home</a>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto"></div>
+        </div>
+    <!-- Navbar Right Side -->
+        <div class="navbar-nav">
+            {% if request.path == '/' %}
+                <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+    </nav>
+    <div class="col-md-12 text-center" style="padding-top: 55px;">
+        {% block content %} {% endblock %}
+         {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                         <div class="alert alert-{{ category }}" style="text-align: center;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+         {% endwith %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

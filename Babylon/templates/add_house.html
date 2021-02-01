@@ -1,0 +1,103 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1 style="padding: 30px;" class="display-5">Add Location</h1>
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center container">
+            <form method="POST" action="" style="padding: 5px; margin-bottom: 30px;">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.address_first_line.label(class="form-control-label") }}
+                    {% if form.address_first_line.errors %}
+                        {{ form.address_first_line(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.address_first_line.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.address_first_line(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.address_second_line.label(class="form-control-label") }}
+                    {% if form.address_second_line.errors %}
+                        {{ form.address_second_line(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.address_second_line.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.address_second_line(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.postcode.label(class="form-control-label") }}
+                    {% if form.postcode.errors %}
+                        {{ form.postcode(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.postcode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.postcode(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.town.label(class="form-control-label") }}
+                    {% if form.town.errors %}
+                        {{ form.town(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.town.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.town(class="form-control form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-secondary btn-sm") }}
+                </div>
+            </form>
+        </div>
+    </div>
+            <a class="card-link text-danger" data-toggle="modal" data-target="#Logout">Logout</a>
+        <div class="modal fade" id="Logout" tabindex="-1" role="dialog" aria-labelledby="LogoutTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('logout') }}" method=post name="logout">
+                            <div class="form-group">
+                                <p>Are you sure you want to logout?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                                <input type="hidden" name="LOGOUT">
+                                <input class="btn btn-danger btn-sm" name="delete-item" type="submit" value="Logout"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
